@@ -135,7 +135,7 @@ if __name__ == '__main__':
     if args.format == 'ears':
         noisy_files = sorted(glob.glob('{}/**/*.wav'.format(noisy_dir)))
     elif args.format == 'ears-mp3':
-        noisy_files = sorted(glob.glob('{}/**/*.mp3'.format(noisy_dir)))[:2]
+        noisy_files = sorted(glob.glob('{}/**/*.mp3'.format(noisy_dir)))
     else:
         noisy_files = sorted(glob.glob('{}/*.wav'.format(noisy_dir)))
         
