@@ -1,0 +1,6 @@
+*.pyc
+*.cu
+*.cpp
+enhanced/*
+*.wav
+*.json
