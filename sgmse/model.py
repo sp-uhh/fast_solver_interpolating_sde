@@ -21,17 +21,17 @@ from utils import MultiResolutionSTFTLoss
 class ScoreModel(pl.LightningModule):
     @staticmethod
     def add_argparse_args(parser):
-        parser.add_argument("--N_inf", type=int, default=15, help="N steps for inference")
+        parser.add_argument("--N_inf", type=int, default=15, help="N reverse steps for inference during training. This is only used for evaluation during training, not for the final evaluation.")
         parser.add_argument("--lr", type=float, default=1e-4, help="The learning rate (1e-4 by default)")
         parser.add_argument("--ema_decay", type=float, default=0.999, help="The parameter EMA decay constant (0.999 by default)")
         parser.add_argument("--t_eps", type=float, default=0.03, help="The minimum time (3e-2 by default)")
         parser.add_argument("--num_eval_files", type=int, default=20, help="Number of files for speech enhancement performance evaluation during training. Pass 0 to turn off (no checkpoints based on evaluation metrics will be generated).")
         parser.add_argument("--loss_type", type=str, default="dsm", help="The type of loss function to use.")
         parser.add_argument("--loss_abs_exponent", type=float, default= 0.5,  help="magnitude transformation in the loss term")
-        parser.add_argument("--output_scale", type=str, default= 'time',  help="backbone model scale in the last output layer")
-        parser.add_argument("--timestep_type_inf", type=str, default= 'default',  help="linear")
-        parser.add_argument("--audiologs_every_epoch", type=int, help="log audios every nth epoch")
-        parser.add_argument("--speclogs_every_epoch", type=int, help="log specs every nth epoch")
+        parser.add_argument("--output_scale", type=str, default= 'sigma',  help="backbone model scale in the last output layer")
+        parser.add_argument("--timestep_type_inf", type=str, default= 'default',  help="default means to take linear spaced diffusion time steps.")
+        parser.add_argument("--audiologs_every_epoch", type=int, help="log audios in wandb every nth epoch")
+        parser.add_argument("--speclogs_every_epoch", type=int, help="log specs in wandb every nth epoch")
         parser.add_argument("--loss_weight_type", type=str, default= 'one',  help="diffusion time weightning for the loss")
         parser.add_argument("--sampler_type", type=str, default= 'pc', help="sampler type for inference")
         return parser

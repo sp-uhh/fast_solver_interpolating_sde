@@ -48,16 +48,16 @@ if __name__ == '__main__':
      base_parser = ArgumentParser(add_help=False)
      parser = ArgumentParser()
      for parser_ in (base_parser, parser):
-          parser_.add_argument("--backbone", type=str, choices=BackboneRegistry.get_all_names(), default="ncsnpp")
-          parser_.add_argument("--sde", type=str, choices=SDERegistry.get_all_names(), default="ouve")
-          parser_.add_argument("--pre_ckpt", type=str, default=None, help="Load ckpt")
-          parser_.add_argument("--git_branch", type=str, default="explore_samplers")     
-          parser_.add_argument("--wandb_entity", type=str, default="bunlong")     
+          parser_.add_argument("--backbone", type=str, choices=BackboneRegistry.get_all_names(), default="ncsnpp_v2")
+          parser_.add_argument("--sde", type=str, choices=SDERegistry.get_all_names(), default="fouve")
+          parser_.add_argument("--pre_ckpt", type=str, default=None, help="Load ckpt to resume training. Leave empty to train from scratch")
+          parser_.add_argument("--git_branch", type=str, default="Addition information on which git branch you are running this experiment on. This is for logging purposes only")     
+          parser_.add_argument("--wandb_entity", type=str, default="", help="Wandb entity name for logging")     
           parser_.add_argument("--nolog", action='store_true', help="Turn off logging (for development purposes)")
-          parser_.add_argument("--save_every_n_epochs", type=int, default=0, help="0 means its turned off") 
+          parser_.add_argument("--save_every_n_epochs", type=int, default=0, help="Save checkpoint every n epochs. 0 means it's turned off")
           parser_.add_argument("--wandb_name", type=str, default="random", help="Name for wandb logger, if set to random, will generate a random name")
-          parser_.add_argument("--wandb_project_name", type=str, default="outputscale_exp", help="Name for wandb logger, if set to random, will generate a random name")
-          parser_.add_argument("--ckpt_destination", type=str, default="")
+          parser_.add_argument("--wandb_project_name", type=str, default="new_project", help="Project name for wandb logger")
+          parser_.add_argument("--ckpt_destination", type=str, default="", help="Destination folder for saving checkpoints. If empty, will save to default location")
           parser_.add_argument("--run_id", type=str,  default='0', help="run id of wandb. If 0 then wandb runs will not be resume")
      temp_args, _ = base_parser.parse_known_args()
 
@@ -118,12 +118,7 @@ if __name__ == '__main__':
                save_check_folder = args.run_id
 
           if logger.version != None:
-               if platform.node() == "spgpu2" and args.ckpt_destination == "":
-                    print('working on spgpu2')
-                    savedir_ck = f'/data2/ncsnpp/logs/{save_check_folder}'
-                    if not os.path.isdir(savedir_ck):
-                         os.makedirs(os.path.join(savedir_ck))
-               elif args.ckpt_destination == "":
+               if args.ckpt_destination == "":
                     savedir_ck = f'/checkpoints/logs_debugging/{save_check_folder}'
                     savedir_ck = os.path.join(os.getcwd() + savedir_ck)
                     if not os.path.isdir(savedir_ck):
